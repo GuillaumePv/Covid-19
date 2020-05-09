@@ -8,6 +8,6 @@ Dans ce repository, vous pourrez retrouver toutes les données ainsi que le code
 
 
 ![Image of University of Lausanne]
-(https://upload.wikimedia.org/wikipedia/commons/7/77/Logo_HEC_Lausanne.png)
+(https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Logo_HEC_Lausanne.png/220px-Logo_HEC_Lausanne.png)
 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
