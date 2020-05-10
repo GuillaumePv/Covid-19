@@ -1,6 +1,6 @@
 Il s'agit d'un projet pour le cours "Recherche Empirique en Management et Economie" à HEC Lausanne.
 
-Les trois étudiants sont Benoit Turbe, Danica Kostic, Robin Bodenstein et Guillaume Pavé.
+Les quatres étudiants sont Benoit Turbe, Danica Kostic, Robin Bodenstein et Guillaume Pavé.
 
 Le but de notre recherche est d'étudier l'effet du régime politique et de la culture de la population (collectivisme ou individualisme) sur la sévérité du Covid-19.
 
