@@ -1,12 +1,12 @@
 clear all
 
-cd "/Users/guillaume/MyProjects/StataProjects/Rem_2020/Project/DictatorShip/AnalyseFinal/AnalyseEU"
+cd "/Users/guillaume/MyProjects/StataProjects/Rem_2020/Project/DictatorShip/AnalyseFinal/AnalyseTotal"
 clear all
 ssc install estout, replace
 
-import excel "EUdataCleaner.xlsx",sheet("10d") firstrow clear
+import excel "dataCleaner.xlsx",sheet("10d") firstrow clear
 
-drop in 26/856
+drop in 58/882
 
 // Logarithme du nombre de morts //
 
@@ -81,20 +81,21 @@ note("{bf:Source:} JHU & Geert Hofstede"))
 
 
 graph twoway (lfit MortsPerHabitant IndexCollecidv, ///
-legend(size(*0.8) label(1 "Nombre de morts par habitants prédits") label(2 "Morts par habitants (Pays Européens)")) ytitle("{bf:Nombre de morts  / Population (en milliers)}" " ", size(small)) yline(0.01164735,lcolor(red)) xline(60 70 80,lcolor(green) lpattern(dash)) ///
+legend(size(*0.8) label(1 "Nombre de morts par habitants prédits") label(2 "Morts par habitants (Pays)")) ytitle("{bf:Nombre de morts  / Population (en milliers)}" " ", size(small)) yline(0.00697165,lcolor(red) lpattern(dash)) xline(60 70 80,lcolor(green) lpattern(dash)) ///
 graphregion(fcolor(gs15))) (scatter MortsPerHabitant IndexCollecidv,xtitle("{bf:Indice d'individualisme}", size(small)) ///
-ylabel(0(.05)0.4) text(0.25 60 "Seuil: 60", color(green) box) text(0.07 28 "Moyenne : 0.012", color(red)) text(0.28 70 "Seuil: 70", place(w) color(green) box) text(0.32 80 "Seuil: 80", place(w) color(green) box) title("Prediction du nombre de morts par habitants selon l'indice d'invidualisme" "({it:10 jours après le 1000 cas confirmés})",size(medsmall) box bexpand) mlabel(Country) ///
+ylabel(0(.05)0.2) text(0.16 60 "Seuil: 60", place(w) color(green) box) text(0.04 22 "Moyenne : 0.007", place(w) color(red)) text(0.17 70 "Seuil: 70", place(w) color(green) box) text(0.18 80 "Seuil: 80", place(w) color(green) box) title("Prediction du nombre de morts par habitants selon l'indice d'invidualisme" "({it:10 jours après le 1000 cas confirmés})",size(medsmall) box bexpand) mlabel(Country) ///
 note("{bf:Source:} JHU & Geert Hofstede"))
 
 graph export "10d/PredictionMortsPerHabitants.png", replace
 
 graph twoway (lfit MortsPerHabitant DemocracyindexEIU, ///
-legend(size(*0.8) label(1 "Nombre de morts par habitants prédits") label(2 "Morts par habitants (Pays Européens)") ) ytitle("{bf:Nombre de morts  / Population (en milliers)}" " ", size(small)) yline(0.01164735,lcolor(red)) ///
+legend(size(*0.8) label(1 "Nombre de morts par habitants prédits") label(2 "Morts par habitants (Pays)") ) ytitle("{bf:Nombre de morts  / Population (en milliers)}" " ", size(small)) yline(0.00697165,lcolor(red) lpattern(dash)) ///
 graphregion(fcolor(gs15))) (scatter MortsPerHabitant DemocracyindexEIU,xtitle("{bf:Democracy Index}") ///
-ylabel(0(.05)0.4) text(0.04 28 "Moyenne : 0.012", color(red)) title("Prediction du nombre de morts selon le Democracy Index" "({it:10 jours après le 1000 cas confirmés})",size(medsmall) box bexpand) mlabel(Country) ///
+ylabel(0(.05)0.2) text(0.035 27 "Moyenne : 0.007", color(red)) title("Prediction du nombre de morts selon le Democracy Index" "({it:10 jours après le 1000 cas confirmés})",size(medsmall) box bexpand) mlabel(Country) ///
 note("{bf:Source:} JHU & Geert Hofstede"))
 
 graph export "10d/PredictionMortsPerHabitantsDemo.png", replace
+
 //correlate lnDeath DemocracyindexEIU IndexCollecidv numberTest PolityII
 //graph matrix DeathsAfter1000confirmed20d PolityII IndexCollecidv 
 
@@ -200,9 +201,9 @@ eststo clear
 reg lnDeath Ind80 DemocracyindexEIU $controls, robust
 reg lnDeath Ind80##c.DemocracyindexEIU $controls, robust
 
-///////////////////////////////////////////
-// Regression utiles pour nos résultats //
-/////////////////////////////////////////
+///////////////////////////////
+// Régressions de l'article //
+/////////////////////////////
 
 // Génération des effets d'interactions //
 
@@ -228,7 +229,7 @@ eststo: quietly reg MortsPerHabitant Ind70, robust
 estadd local Controls "Non"
 eststo: quietly reg MortsPerHabitant Ind80, robust
 estadd local Controls "Non"
-esttab using "10d/regMortPerHabIndiv10jSansControle.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4)
+esttab using "10d/regMortPerHabIndiv20jSansControle.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4)
 
 eststo clear
 
@@ -239,7 +240,7 @@ estadd local Controls "Oui"
 eststo: quietly reg MortsPerHabitant Ind80 $controls, robust
 estadd local Controls "Oui"
 
-esttab using "10d/regMortPerHabIndiv10jAvecControle.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4) drop(*$controls)
+esttab using "10d/regMortPerHabIndiv20jAvecControle.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4) drop(*$controls)
 eststo clear
 
 // Regression pour les effets d'interactions //
@@ -249,7 +250,7 @@ eststo: quietly reg MortsPerHabitant effetInteractionInd70DemoIndex $controls, r
 estadd local Controls "Oui"
 eststo: quietly reg MortsPerHabitant effetInteractionInd80DemoIndex $controls, robust
 estadd local Controls "Oui"
-esttab using "10d/regInteractions10j.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4) drop(*$controls)
+esttab using "10d/regInteractions20j.tex", replace p(4) scalars("Controls Contrôles") r2(4) ar2(4) drop(*$controls)
 
 eststo clear
 
